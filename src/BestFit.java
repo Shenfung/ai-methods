@@ -6,6 +6,8 @@ import javax.swing.*;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
+import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 public class BestFit {
@@ -19,8 +21,8 @@ public class BestFit {
             Result result = solveProblem(problem);
             System.out.println("Total cost for problem " + problem.id + ": " + result.solution.size());
             System.out.println("Iterations for problem " + problem.id + ": " + result.iterations);
-            dataset.addValue(result.iterations, "Iterations", "Problem " + problem.id);
-            dataset.addValue(result.solution.size(), "Cost", "Problem " + problem.id);
+            dataset.addValue(result.iterations, "Iterations", " " + problem.id);
+            dataset.addValue(result.solution.size(), "Cost", " " + problem.id);
         }
         plotBarChart(dataset);
     }
@@ -74,9 +76,13 @@ public class BestFit {
         JFreeChart chart = ChartFactory.createBarChart(
                 "Best Fit",
                 "Problem ID",
-                "Value",
+                "Iterations",
                 dataset
         );
+        BarRenderer renderer = (BarRenderer) chart.getCategoryPlot().getRenderer();
+        renderer.setDefaultItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+        renderer.setDefaultItemLabelsVisible(true);
+
         ChartPanel chartPanel = new ChartPanel(chart);
         chartPanel.setPreferredSize(new Dimension(800, 600));
         JFrame frame = new JFrame("Best Fit");
